@@ -1,7 +1,7 @@
 FROM python:3.6
 MAINTAINER dgrossman <dgrossman@iqt.org>
 
-RUN apt-get update && \
+RUN apt-get update --no-install-recommends&& \
         apt-get install -y \
         build-essential \
         cmake \
@@ -18,11 +18,13 @@ RUN apt-get update && \
         libtiff-dev \
         libjasper-dev \
         libavformat-dev \
-        libpq-dev
+        libpq-dev \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN pip install numpy
 
-WORKDIR /
+#WORKDIR /
 RUN wget https://github.com/Itseez/opencv/archive/3.2.0.zip \
 && unzip 3.2.0.zip \
 && mkdir /opencv-3.2.0/cmake_binary \
@@ -53,7 +55,7 @@ RUN pip install flake8 pep8 --upgrade
 RUN mkdir /in
 RUN mkdir /out
 
-ADD . /prog
+COPY . /prog
 WORKDIR /prog
 
 CMD ["/usr/local/bin/python","./vid2pics.py","/in","/out"]

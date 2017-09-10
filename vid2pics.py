@@ -23,11 +23,12 @@ def process(in_dir, out_dir):
     print('Examining input dir for work')
     work_items = find_work(in_dir, ['avi', 'mov', 'mp4'])
     print('Found {0} work items'.format(len(work_items)))
+    ret = True
     for work_item in work_items:
         print('Working on: {0}'.format(work_item))
         frame_num = 0
         cap = cv2.VideoCapture(os.path.join(in_dir, work_item))
-        while (cap.isOpened()):
+        while (cap.isOpened() and ret):
             ret, frame = cap.read()
             print('frame: {0} ret:{1}'.format(frame_num, ret))
             if ret:
